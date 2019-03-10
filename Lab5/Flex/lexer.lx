@@ -1,0 +1,52 @@
+%{
+	#include <stdlib.h>
+	#include <string.h>
+	#include <math.h>
+%}
+
+%option noyywrap
+
+LETTER				[a-z_]
+DIGIT				[0-9]
+NOZERODIGIT			[1-9]
+ID					{LETTER}({LETTER}|{DIGIT})*
+NUM					{DIGIT}+
+INT_CONST			("+"|"-")?{NOZERODIGIT}{NUM}*|{DIGIT}
+SIR_CONST			["][^\n]*["]
+CHARACTER			"'"[^\n]"'"
+
+%%
+
+"if"|"while"|"int"|"char"|"else"|"null"|"read"|"write"|"close"|"string"|"new"|"begin"|"end" printf("Key word: %s\n", yytext);
+
+"<"|">"|"="|"+"|"*"|"/"|"-"|"=="|">="|"<="|"!="     										printf( "Operator: %s\n", yytext);
+
+"("|")"|"{"|"}"|"["|"]"|";"  																printf("Separator: %s\n", yytext);
+
+{SIR_CONST}     																			printf("String: %s\n", yytext);
+
+{CHARACTER}     																			printf("Character: %s\n", yytext);
+ 
+{INT_CONST}     																			printf("Integer const: %s (%d)\n", yytext, atoi(yytext));
+
+{NUM}																						printf("Number: %d\n", atoi(yytext));
+
+{ID}																						printf("Identifier: %s\n", yytext);
+
+"{"[^}\n]*"}" 		/* deletes the comments */ 
+
+[ \t\n]+ 		/* deletes the spaces */ 
+		 
+. printf("Eroare\n");
+%%
+int main( argc, argv ) 
+int argc; 
+char **argv; 
+{ 
+    ++argv, --argc; /* skip over program name */ 
+    if ( argc > 0 ) 
+    yyin = fopen( argv[0], "r" ); 
+    else 
+     yyin = stdin; 
+    yylex(); 
+} 

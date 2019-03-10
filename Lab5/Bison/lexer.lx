@@ -1,0 +1,67 @@
+%{
+	#include <stdlib.h>
+	#include <string.h>
+	#include <math.h>
+	#include "parser.tab.h"
+%}
+
+%option noyywrap
+%option caseless
+
+LETTER				[a-z_]
+DIGIT				[0-9]
+NOZERODIGIT			[1-9]
+ID					{LETTER}({LETTER}|{DIGIT})*
+NUM					{DIGIT}+
+INT_CONST			("+"|"-")?{NOZERODIGIT}{NUM}*|{DIGIT}
+SIR_CONST			["][^\n]*["]
+CHARACTER			"'"[^\n]"'"
+COMENT				"{"[^}]*"}"
+
+%%
+
+[ \t\n]
+{COMENT}
+
+if				{return IF;}
+while			{return WHILE;}
+int				{return INTEGER;}
+char			{return CHAR;}
+else			{return ELSE;}
+null			{return NULLL;}
+read			{return READ;}
+write			{return WRITE;}
+close			{return CLOSE;}
+string			{return STRING;}
+new				{return NEW;}
+begin			{return BEGINN;}
+end				{return END;}
+
+"<"				{return LT;}
+">"				{return GT;}
+"="				{return ATR;}
+"+"				{return '+';}
+"*"				{return '*';}
+"/"				{return '/';}
+"-"				{return '-';}
+"=="			{return EQ;}
+">="			{return GE;}
+"<="			{return LE;}
+"!="			{return NE;}
+
+"("				{return '(';}
+")"				{return ')';}
+"{"				{return '{';}
+"}"				{return '}';}
+"["				{return '[';}
+"]"				{return ']';}
+";"				{return ';';}
+","				{return ',';}
+
+{SIR_CONST}     {return CONST_STR;}
+{CHARACTER}     {return CONST_CHAR;}
+{NOZERODIGIT}{NUM}* {return CONST;}
+{INT_CONST}     {return CONST_INT;}
+{ID}			{return ID;}
+
+%%

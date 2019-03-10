@@ -1,0 +1,11 @@
+begin
+int a;
+int b;
+int c
+[]int array;
+string y = "fdsf";
+char u = 'g' , ala;
+a=-26765 * b + c
+read(a)
+read(y)
+end
